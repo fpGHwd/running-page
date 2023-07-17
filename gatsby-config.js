@@ -14,7 +14,7 @@ module.exports = {
       },
       {
         name: 'Blog',
-        url: 'https://blog.autove.dev',
+        url: 'https://melt.autove.dev',
       },
       {
         name: 'About',
