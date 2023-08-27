@@ -56,6 +56,12 @@ const MIDDAY_RUN_TITLE = IS_CHINESE ? '午间跑步' : 'Midday Run';
 const AFTERNOON_RUN_TITLE = IS_CHINESE ? '午后跑步' : 'Afternoon Run';
 const EVENING_RUN_TITLE = IS_CHINESE ? '傍晚跑步' : 'Evening Run';
 const NIGHT_RUN_TITLE = IS_CHINESE ? '夜晚跑步' : 'Night Run';
+// add ride type
+const MORNING_RIDE_TITLE = IS_CHINESE ? '清晨骑行' : 'Morning Ride';
+const MIDDAY_RIDE_TITLE = IS_CHINESE ? '午间骑行' : 'Midday Ride';
+const AFTERNOON_RIDE_TITLE = IS_CHINESE ? '午后骑行' : 'Afternoon Ride';
+const EVENING_RIDE_TITLE = IS_CHINESE ? '傍晚骑行' : 'Evening Ride';
+const NIGHT_RIDE_TITLE = IS_CHINESE ? '夜晚骑行' : 'Night Ride';
 
 const RUN_TITLES = {
   FULL_MARATHON_RUN_TITLE,
@@ -65,6 +71,11 @@ const RUN_TITLES = {
   AFTERNOON_RUN_TITLE,
   EVENING_RUN_TITLE,
   NIGHT_RUN_TITLE,
+  MORNING_RIDE_TITLE,
+  MIDDAY_RIDE_TITLE,
+  AFTERNOON_RIDE_TITLE,
+  EVENING_RIDE_TITLE,
+  NIGHT_RIDE_TITLE,
 };
 
 export {
