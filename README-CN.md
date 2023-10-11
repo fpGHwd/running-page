@@ -84,12 +84,13 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 | [EINDEX](https://github.com/eindex)               | <https://workouts.eindex.me/>                  | Strava/Nike |
 | [Melt](https://github.com/fpGHwd)                 | <https://running.autove.dev/>                  | Strava      |
 | [deepinwine](https://github.com/deepinwine)       | <https://deepin.autove.dev/>                   | Garmin-cn   |
+| [Jeffggmm](https://github.com/Jeffggmm)           | <https://jeffggmm.github.io/workouts_page/>    | Garmin      |
 
 </details>
 
 ## 它是怎么工作的
 
-![image](https://user-images.githubusercontent.com/15976103/105784027-e1ad9900-5fb2-11eb-9479-372be21482f1.png)
+![image](https://github.com/yihong0618/running_page/assets/15976103/85d8d59d-2639-431e-8406-9d818afbd4ab)
 
 ## 特性
 
@@ -461,12 +462,20 @@ python3(python) run_page/tulipsport_sync.py nLgy****RyahI
 
 如果你想同步 `fit` 格式，增加命令 --fit
 
+如果你使用 Garmin 作为数据源建议您将代码拉取到本地获取 Garmin 国际区的密钥，注意**Python 版本必须>=3.8**
+
+#### 获取佳明国际区的密钥
+
+在终端中输入以下命令
+
 ```python
-# to get secret_string
+# 获取密钥
 python3(python) run_page/get_garmin_secret.py ${your email} ${your password}
-# use this secret_string
-python3(python) run_page/garmin_sync.py ${secret_string}
 ```
+
+#### 执行佳明国际区同步脚本
+
+复制上述终端中输出的密钥，如果您是使用 Github 请在 Github Action 中配置**GARMIN_SECRET_STRING**参数
 
 示例：
 
@@ -487,13 +496,23 @@ python3(python) run_page/garmin_sync.py xxxxxxxxxxx
 
 如果你想同步 `fit` 格式，增加命令 --fit
 
+如果你使用 Garmin 作为数据源建议您将代码拉取到本地获取 Garmin 国际区的密钥，注意**Python 版本必须>=3.10**
+
+#### 获取佳明国区的密钥
+
+在终端中输入以下命令
+
 ```python
 # to get secret_string
 python3(python) run_page/get_garmin_secret.py ${your email} ${your password} --is-cn
-# use this secret_string
-python3(python) run_page/garmin_sync.py ${secret_string}
 ```
 
+![get_garmin_cn_secret](docs/get_garmin_cn_secret.jpg)
+
+#### 执行佳明国区同步脚本
+
+复制上述终端中输出的密钥，如果您是使用 Github 请在 Github Action 中配置**GARMIN_SECRET_STRING_CN** 参数
+![get_garmin_secret](docs/add_garmin_secret_cn_string.jpg)
 示例：
 
 ```python
@@ -846,6 +865,40 @@ Actions [源码](https://github.com/yihong0618/running_page/blob/master/.github/
    ![image](https://user-images.githubusercontent.com/15976103/94450295-aacf9e00-01df-11eb-80b7-a92b9cd1461e.png)
    我的 secret 如下
    ![image](https://user-images.githubusercontent.com/15976103/94451037-8922e680-01e0-11eb-9bb9-729f0eadcdb7.png)
+
+</details>
+
+## 快捷指令
+
+<details>
+
+<summary>使用 iOS 的 Shortcuts 实现自动化</summary>
+
+下面拿 keep app 举例，当结束跑步后关闭 app，然后自动触发 Actions 更新数据。
+
+1. 拿到项目的 actions id（需要自行申请 token）
+
+```shell
+curl https://api.github.com/repos/yihong0618/running_page/actions/workflows -H "Authorization: token d8xxxxxxxxxx" # change to your config
+```
+
+<center><img src="https://cdn.jujimeizuo.cn/blog/2023/10/get-action-id.jpg" alt="get-action-id"></center>
+
+2. 结合快捷指令
+
+   1. 通过 icloud 获取 [running-page-shortcuts-template](https://www.icloud.com/shortcuts/4a5807a98b9a4e359815ff179c62bacb)
+
+   2. 修改下图字典参数
+   <center> <img src="https://cdn.jujimeizuo.cn/blog/2023/10/running-page-template.jpg"> </center>
+
+3. 自动化
+
+<center>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/new-automation.png" width=20% height=20%>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/select-close.png" width=20% height=20%>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/select-shortcut.png" width=20% height=20%>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/finish-automation.png" width=20% height=20%>
+</center>
 
 </details>
 

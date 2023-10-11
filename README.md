@@ -82,12 +82,13 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 | [Melt](https://github.com/fpGHwd)                 | <https://running.autove.dev/>                  | Strava      |
 | [deepinwine](https://github.com/deepinwine)       | <https://deepin.autove.dev/>                   | Garmin-cn   |
 | [Echo](https://github.com/donghao526)             | <https://donghao526.github.io/running>         | JoyRun      |
+| [Jeffggmm](https://github.com/Jeffggmm)           | <https://jeffggmm.github.io/workouts_page/>    | Garmin      |
 
 </details>
 
 ## How it works
 
-![image](https://user-images.githubusercontent.com/15976103/103496454-4294f600-4e79-11eb-9bd6-8eea7a07ddff.png)
+![image](https://github.com/yihong0618/running_page/assets/15976103/85d8d59d-2639-431e-8406-9d818afbd4ab)
 
 ## Features
 
@@ -271,9 +272,23 @@ If you only want `tcx` files add args --tcx
 
 If you only want `fit` files add args --fit
 
+If you are using Garmin as a data source, it is recommended that you pull the code to your local environment to run and obtain the Garmin secret.
+**The Python version must be >=3.8**
+
+#### Get Garmin Secret
+
+Enter the following command in the terminal
+
 ```python
 # to get secret_string
 python3(python) run_page/get_garmin_secret.py ${your email} ${your password}
+```
+
+#### Execute Garmin Sync Script
+
+Copy the Secret output in the terminal,If you are using Github, please configure **GARMIN_SECRET_STRING** in Github Action.
+
+```python
 # use this secret_string
 python3(python) run_page/garmin_sync.py ${secret_string}
 ```
@@ -303,17 +318,35 @@ If you only want `tcx` files add args --tcx
 
 If you only want `fit` files add args --fit
 
+If you are using Garmin as a data source, it is recommended that you pull the code to your local environment to run and obtain the Garmin secret.
+**The Python version must be >=3.10**
+
+#### Get Garmin CN Secret
+
+Enter the following command in the terminal
+
 ```python
 # to get secret_string
 python3(python) run_page/get_garmin_secret.py ${your email} ${your password} --is-cn
-# use this secret_string
-python3(python) run_page/garmin_sync.py ${secret_string}
 ```
+
+![get_garmin_cn_secret](docs/get_garmin_cn_secret.jpg)
+
+#### Execute Garmin CN Sync Script
+
+Copy the Secret output in the terminal,If you are using Github, please configure **GARMIN_SECRET_STRING_CN** in Github Action.
+![get_garmin_secret](docs/add_garmin_secret_cn_string.jpg)
 
 example：
 
 ```python
-python3(python) run_page/garmin_sync.py xxxxxxxxx(secret_string)--is-cn
+python3(python) run_page/garmin_sync.py xxxxxxxxx(secret_string) --is-cn
+```
+
+only-run：
+
+```python
+python3(python) run_page/garmin_sync.py xxxxxxxxxxxxxx(secret_string)  --is-cn --only-run
 ```
 
 </details>
@@ -647,12 +680,14 @@ For more display effects, see:
 1. Go to repository's `Settings -> GitHub Pages -> Source`, choose `GitHub Actions`
 
 2. Go to the repository's `Actions -> Workflows -> All Workflows`, choose `Run Data Sync` from the left panel, and click `Run workflow`.
-  * The `Run Data Sync` will update data and then trigger the `Publish GitHub Pages` workflow 
-  * Make sure the workflow runs without errors.
+
+- The `Run Data Sync` will update data and then trigger the `Publish GitHub Pages` workflow
+- Make sure the workflow runs without errors.
 
 3. Open your website to check on the results
-  * note if the website doesn't reflect the latest data, please refresh it by `F5`.
-  * Some browsers (e.g. Chrome) won't refresh if there is a cache, you then need to use `Ctrl+F5` (Windows) or `Shift+Cmd+r` (Mac) to force clearing the cache and reload the page.
+
+- note if the website doesn't reflect the latest data, please refresh it by `F5`.
+- Some browsers (e.g. Chrome) won't refresh if there is a cache, you then need to use `Ctrl+F5` (Windows) or `Shift+Cmd+r` (Mac) to force clearing the cache and reload the page.
 
 4. make sure you have write permissions in Workflow permissions settings.
 
@@ -686,6 +721,40 @@ The following steps need to be taken
 ![image](https://user-images.githubusercontent.com/15976103/94451037-8922e680-01e0-11eb-9bb9-729f0eadcdb7.png)
 
 4. Go to repository's `Settings -> Code and automation -> Actions ->General`, Scroll to the bottom, find `Workflow permissions`, choose the first option `Read and write permissions`, click `Save`.
+
+</details>
+
+## Shortcuts
+
+<details>
+
+<summary>Automate with <code> iOS Shortcuts </code> </summary>
+
+Take the keep app as an example. Close the app after running, and then automatically trigger Actions to update the data.
+
+1. Get actions id（need to apply token）
+
+```shell
+curl https://api.github.com/repos/yihong0618/running_page/actions/workflows -H "Authorization: token d8xxxxxxxxxx" # change to your config
+```
+
+<center><img src="https://cdn.jujimeizuo.cn/blog/2023/10/get-action-id.jpg" alt="get-action-id"></center>
+
+2. Binding shortcut instruction
+
+   1. Get it via icloud [running-page-shortcuts-template](https://www.icloud.com/shortcuts/4a5807a98b9a4e359815ff179c62bacb)
+
+   2. Modify the dictionary parameters in the following figure
+   <center> <img src="https://cdn.jujimeizuo.cn/blog/2023/10/running-page-template.jpg"> </center>
+
+3. Automation
+
+<center>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/new-automation.png" width=20% height=20%>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/select-close.png" width=20% height=20%>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/select-shortcut.png" width=20% height=20%>
+<img src="https://cdn.jujimeizuo.cn/blog/2023/10/finish-automation.png" width=20% height=20%>
+</center>
 
 </details>
 
