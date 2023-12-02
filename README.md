@@ -381,12 +381,13 @@ python3(python) run_page/garmin_sync.py xxxxxxxxxxxxxx(secret_string)  --is-cn -
 
 Get Nike's `refresh_token`
 
-1. Login [Nike](https://www.nike.com) website
-2. In Develop -> Application-> Storage -> https:unite.nike.com look for `refresh_token`
+**ALL need to do outside GFW**
 
-<br>
+![example img](https://user-images.githubusercontent.com/67903793/282300381-4e7437d0-65a9-4eed-93d1-2b70e360215f.png)
 
-![image](https://user-images.githubusercontent.com/15976103/94448123-23812b00-01dd-11eb-8143-4b0839c31d90.png)
+1. Login from this [website](https://unite.nike.com/s3/unite/mobile.html?androidSDKVersion=3.1.0&corsoverride=https%3A%2F%2Funite.nike.com&uxid=com.nike.sport.running.droid.3.8&backendEnvironment=identity&view=login&clientId=VhAeafEGJ6G8e9DxRUz8iE50CZ9MiJMG), open F12 -> XHR -> get the `refresh_token` from login api.
+
+2. copy this `refresh_token` and use it in GitHub Secrets or in command line
 
 3. Execute in the root directory:
 
