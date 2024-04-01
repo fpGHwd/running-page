@@ -98,6 +98,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 | [Ryan](https://github.com/85Ryan)                 | <https://85ryan.github.io/gooorun/>            | Strava      |
 | [PPZ](https://github.com/8824PPZ)                 | <https://run.dudubbbbbbbbb.top/>               | Strava      |
 | [Yer1k](https://github.com/Yer1k)                 | <https://running.yer1k.com/>                   | Strava      |
+| [AlienVision](https://github.com/weaming)         | <https://run.drink.cafe/>                      | Strava      |
 </details>
 
 ## 它是怎么工作的
@@ -144,7 +145,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 - **[Nike+Strava(Using NRC Run, Strava backup data)](#nikestrava)**
 - **[Garmin_to_Strava(Using Garmin Run, Strava backup data)](#garmin_to_strava)**
 - **[Strava_to_Garmin(Using Strava Run, Garmin backup data)](#strava_to_garmin)**
-
+- **[Coros高驰](#Coros高驰)**
 ## 视频教程
 
 - https://www.youtube.com/watch?v=reLiY9p8EJk
@@ -865,6 +866,27 @@ python3(python) run_page/strava_to_garmin_sync.py ${{ secrets.STRAVA_CLIENT_ID }
 
 </details>
 
+### Coros高驰
+
+<details>
+<summary>获取您的 Coros高驰 数据</summary>
+
+#### 在终端中输入以下命令
+
+```bash
+python run_page/coros_sync.py ${{ secrets.COROS_ACCOUNT }} ${{ secrets.COROS_PASSWORD }}
+```
+
+#### 修改 `run_data_sync.yml` 中 `env.RUN_TYPE: coros`
+
+#### 设置 github action中Coros高驰信息
+
+- 在github action中配置`COROS_ACCOUNT`,`COROS_PASSWORD`参数
+
+  ![github-action](https://img3.uploadhouse.com/fileuploads/30980/3098042335f8995623f8b50776c4fad4cf7fff8d.png)
+
+</details>
+
 ### Total Data Analysis
 
 <details>
@@ -1106,7 +1128,7 @@ curl https://api.github.com/repos/yihong0618/running_page/actions/workflows -H "
 
 - vercel git
 
-  如果想 ignpre gh-pages 可以在 `settings` -> `build` -> `Ignored Build Step` -> `Custom` 输入命令：
+  如果想 ignore gh-pages 可以在 `settings` -> `build` -> `Ignored Build Step` -> `Custom` 输入命令：
 
   ```bash
   if [ "$VERCEL_GIT_COMMIT_REF" != "gh-pages" ]; then exit 1; else exit 0;
