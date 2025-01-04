@@ -102,6 +102,11 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 | [Vensent](https://github.com/Vensent)             | <https://vensent.github.io/workouts_page/>     | Garmin      |
 | [Zeonsing](https://github.com/NoonieBao)          | <https://run.jogzeal.com/>                     | Coros       |
 | [yaoper](https://github.com/yaoper)               | <https://running.yaoper.cn>                    | codoon      |
+| [NoZTurn](https://github.com/NoZTurn)             | <https://run.jiangkai.org>                     | Strava      |
+| [laqieer](https://github.com/laqieer)             | <https://laqieer.github.io/running_page/>      | Strava      |
+| [Guoxin](https://github.com/guoxinl)              | <https://running.guoxin.space/>                | Strava      |
+| [Darren](https://github.com/Flavored4179)         | <https://run.wdoc.top/>                        | tcx         |
+| [Evan](https://github.com/LinghaoChan)            | <https://github.com/LinghaoChan/running>       | Keep        |
 </details>
 
 ## 它是怎么工作的
@@ -132,6 +137,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 ## 支持
 
 - **[Strava](#strava)**
+- **[New Way To Sync Nike Run Club](#nike-run-club-new)** ：NFC同步的新方式
 - **[Nike Run Club](#nike-run-club)**
 - **[Garmin](#garmin)**
 - **[Garmin-cn](#garmin-cn-大陆用户请用这个)**
@@ -144,7 +150,8 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 - **[FIT](#fit)**
 - **[佳明国内同步国际](#Garmin-CN-to-Garmin)**
 - **[Tcx+Strava(upload all tcx data to strava)](#tcx_to_strava)**
-- **[Gpx+Strava(upload all tcx data to strava)](#gpx_to_strava)**
+- **[Tcx+Garmin(upload all tcx data to Garmin)](#tcx_to_garmin)**
+- **[Gpx+Strava(upload all gpx data to strava)](#gpx_to_strava)**
 - **[Nike+Strava(Using NRC Run, Strava backup data)](#nikestrava)**
 - **[Garmin_to_Strava(Using Garmin Run, Strava backup data)](#garmin_to_strava)**
 - **[Strava_to_Garmin(Using Strava Run, Garmin backup data)](#strava_to_garmin)**
@@ -160,7 +167,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 git clone https://github.com/yihong0618/running_page.git --depth=1
 ```
 
-## 安装及测试 (node >= 16 python >= 3.8)
+## 安装及测试 (node >= 20 python >= 3.11)
 
 ```bash
 pip3 install -r requirements.txt
@@ -240,11 +247,13 @@ siteMetadata: {
 const USE_DASH_LINE = true;
 // styling: 透明度：[0, 1]
 const LINE_OPACITY = 0.4;
+// update for now 2024/11/17 the privacy mode is true
 // styling: 开启隐私模式(不显示地图仅显示轨迹): 设置为 `true`
 // 注意：此配置仅影响页面显示，数据保护请参考下方的 "隐私保护"
-const PRIVACY_MODE = false;
+const PRIVACY_MODE = true;
+// update for now 2024/11/17 the lights on default is false
 // styling: 默认关灯: 设置为 `false`, 仅在隐私模式关闭时生效(`PRIVACY_MODE` = false)
-const LIGHTS_ON = true;
+const LIGHTS_ON = false;
 ```
 
 > 隐私保护：设置下面环境变量：
@@ -397,13 +406,13 @@ TRANS_GCJ02_TO_WGS84 = True
 ![image](https://user-images.githubusercontent.com/15976103/102352588-e3af3000-3fe2-11eb-8131-14946b0262eb.png)
 
 ```bash
-python3(python) run_page/joyrun_sync.py ${your mobile} ${your 验证码}
+python3(python) run_page/joyrun_sync.py ${your mobile} ${your 验证码} --athlete ${your own name}
 ```
 
 示例：
 
 ```bash
-python3(python) run_page/joyrun_sync.py 13333xxxx xxxx
+python3(python) run_page/joyrun_sync.py 13333xxxx xxxx --athlete yihong0618
 ```
 
 joyrun 导出 gpx 文件
@@ -428,6 +437,12 @@ python3(python) run_page/joyrun_sync.py 13333xxxx example --with-gpx
 
 ```bash
 python3(python) run_page/joyrun_sync.py 1393xx30xxxx 97e5fe4997d20f9b1007xxxxx --from-uid-sid --with-gpx
+```
+
+> 支持配置min_grid_distance，默认为10
+
+```bash
+python3(python) run_page/joyrun_sync.py 13333xxxx xxxx --athlete yihong0618 --min_grid_distance 5 
 ```
 
 </details>
@@ -633,6 +648,38 @@ python3(python) run_page/garmin_sync_cn_global.py ${garmin_cn_secret_string} ${g
 
 </details>
 
+### Nike Run Club New
+
+<details>
+<summary>Get your <code>Nike Run Club</code> data</summary>
+
+<br>
+
+> Please note:由于nike run club已经在中国大陆停止运营，所以只能通过 vpn 的方式进行登录。在开始之前先确认自己是全局的非中国大陆的代理，能够正确的访问`nike.com`而不是`nike.com.cn` 如下图所示.
+
+![nike.com](https://github.com/user-attachments/assets/8ce6ae8f-4bc6-4522-85ec-3e5b7590e96d)
+<br>
+
+1. 登录/注册 [NikeRunClub](https://www.nike.com/) 账号
+   ![login](https://github.com/user-attachments/assets/659341fb-4abf-491e-bda7-bfca968921b3)
+2. 登录成功后,键盘打开F12->Application->localstorage-> 复制键为`https://www.nike.com`的值中的`access_token`的内容.
+   ![developer_mode](https://github.com/user-attachments/assets/c932318d-a123-4505-8fd8-b46946c25d29)
+3. 在根目录执行,你应该就可以看到下图中的内容，然后你就可以正常在你的手机版NRC里登录你的账号了:
+
+```bash
+python3(python) run_page/nike_sync.py ${access_token}
+```
+
+如果你同步了一次（已经完成同步）想继续同步新的
+```bash
+python3(python) run_page/nike_sync.py ${access_token} --continue-sync
+```
+
+![tg_image_166091873](https://github.com/user-attachments/assets/9d4851d6-849a-4bb7-8ffe-5358fa7328b2)
+
+如果你想自动化同步NRC中的运动数据,去 [issue692](https://github.com/yihong0618/running_page/issues/692#issuecomment-2218849713)中查看相关内容.
+
+</details>
 
 ### Nike Run Club
 
@@ -774,6 +821,33 @@ python3(python) run_page/tcx_to_strava_sync.py ${client_id} ${client_secret} ${s
 python3(python) run_page/tcx_to_strava_sync.py xxx xxx xxx
 或
 python3(python) run_page/tcx_to_strava_sync.py xxx xxx xxx --all
+```
+
+> 如果你已经上传过需要跳过判断增加参数 `--all`
+
+</details>
+
+### TCX_to_Garmin
+
+<details>
+<summary>上传所有的 tcx 格式的跑步数据到 Garmin</summary>
+
+<br>
+
+1. 完成 garmin 的步骤
+2. 把 tcx 文件全部拷贝到 TCX_OUT 中
+3. 在项目根目录下执行：
+
+```bash
+python3 run_page/tcx_to_garmin_sync.py ${{ secrets.GARMIN_SECRET_STRING_CN }} --is-cn
+```
+
+示例：
+
+```bash
+python run_page/tcx_to_garmin_sync.py xxx --is-cn
+或佳明国际
+python run_page/tcx_to_garmin_sync.py xxx
 ```
 
 > 如果你已经上传过需要跳过判断增加参数 `--all`
@@ -927,7 +1001,7 @@ python3(python) run_page/keep_to_strava_sync.py ${your mobile} ${your password} 
 3. run_data_sync.yml中的修改：
 
     ```yaml
-    RUN_TYPE: keep_to_starva_sync
+    RUN_TYPE: keep_to_strava_sync
     ```
 
 </details>
@@ -998,7 +1072,7 @@ python3(python) run_page/gen_svg.py --from-db --type circular --use-localtime
 
 5. 下滑点击 `环境变量 (高级)`，并添加一个如下的变量：
 
-   > 变量名称 = `PYTHON_VERSION`, 值 = `3.8`
+   > 变量名称 = `PYTHON_VERSION`, 值 = `3.11`
 
 6. 点击 `保存并部署`，完成部署。
 
@@ -1156,6 +1230,10 @@ curl https://api.github.com/repos/yihong0618/running_page/actions/workflows -H "
 # 赞赏
 
 谢谢就够了
+
+# Raycast 插件
+
+<a title="Install running-page Raycast Extension" href="https://www.raycast.com/Lemon/running-page"><img src="https://www.raycast.com/Lemon/running-page/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a>
 
 # FAQ
 
