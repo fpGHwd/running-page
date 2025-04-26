@@ -25,7 +25,7 @@ on:
 
 env:
   # please change to your own config.
-  RUN_TYPE: strava # support strava/nike/garmin/coros/garmin_cn/garmin_sync_cn_global/keep/only_gpx/only_fit/nike_to_strava/strava_to_garmin/tcx_to_garmin/strava_to_garmin_cn/garmin_to_strava/garmin_to_strava_cn/codoon/oppo, Please change the 'pass' it to your own
+  RUN_TYPE: strava # support strava/nike/garmin/coros/garmin_cn/garmin_sync_cn_global/keep/only_gpx/only_fit/nike_to_strava/strava_to_garmin/tcx_to_garmin/strava_to_garmin_cn/garmin_to_strava/garmin_to_strava_cn/codoon/oppo/db_updater, Please change the 'pass' it to your own
   ATHLETE: Melt
   TITLE: Melt Running
   MIN_GRID_DISTANCE: 5 # change min distance here
@@ -42,6 +42,8 @@ env:
   DATA_CACHE_PREFIX: 'track_data'
   BUILD_GH_PAGES: false # If you do not need GitHub Page please set it to `false`
   SAVE_TO_PARQENT: false # If you want to save the data to the repo, set it to `true`
+  GENERATE_MONTH_OF_LIFE: true # If you want to generate the month of life, set it to `true`
+  BIRTHDAY_MONTH: 1989-03 # If you want to generate the month of life, set it to your birthday month, format is YYYY-MM
 
 jobs:
   sync:
@@ -206,6 +208,11 @@ jobs:
         # If you want to sync fit activity in gpx format, please consider the following script:
         # python run_page/oppo_sync.py ${{ secrets.OPPO_ID }} ${{ secrets.OPPO_CLIENT_SECRET }} ${{ secrets.OPPO_CLIENT_REFRESH_TOKEN }} --with-gpx
 
+      - name: Run db updater script to add "Elevation Gain" field to db
+        if: env.RUN_TYPE == 'db_updater'
+        run: |
+            python run_page/db_updater.py
+
       - name: Make svg GitHub profile
         if: env.RUN_TYPE != 'pass'
         env:
@@ -221,7 +228,12 @@ jobs:
         # if you want use the style:the start day of each year always aligns with Monday. please use the following script:
         # python run_page/gen_svg.py --from-db --title "${{ env.TITLE }}" --type github --github-style "align-monday" --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github.svg --use-localtime --min-distance 0.5
         # python run_page/gen_svg.py --from-db --year $(date +"%Y")  --language zh_CN --title "$(date +"%Y") Running" --type github --github-style "align-monday" --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github_$(date +"%Y").svg --use-localtime --min-distance 0.5
-
+      - name: Make month of life
+        if: env.GENERATE_MONTH_OF_LIFE == 'true'
+        env:
+          BIRTHDAY_MONTH: ${{ env.BIRTHDAY_MONTH }}
+        run: |
+          python run_page/gen_svg.py --from-db --type monthoflife --birth "${{env.BIRTHDAY_MONTH}}" --special-color '#f9d367'  --special-color2 '#f0a1a8' --output assets/mol.svg --use-localtime --athlete "${{env.ATHLETE}}" --title 'Runner Month of Life'
 
       - name: Save data to parqent
         if: env.SAVE_TO_PARQENT == 'true'
