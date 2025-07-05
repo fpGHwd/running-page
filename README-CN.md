@@ -234,6 +234,32 @@ const MAPBOX_TOKEN =
   'pk.eyJ1IjoieWlob25nMDYxOCIsImEiOiJja2J3M28xbG4wYzl0MzJxZm0ya2Fua2p2In0.PNKfkeQwYuyGOTT_x9BJ4Q';
 ```
 
+## 更改默认地图服务样式
+
+> 在使用默认的地图服务样式之外，你可以通过修改 src/utils/const.ts 文件中的以下配置项来自定义地图显示。
+
+```typescript
+const MAP_TILE_VENDOR = 'maptiler';
+const MAP_TILE_STYLE = 'winter-dark';
+const MAP_TILE_ACCESS_TOKEN = '你的 access token';
+```
+
+目前，支持的 MAP_TILE_VENDOR 选项包括：
+
+- **"mapbox"** - Mapbox 地图服务
+
+- **"maptiler"** - MapTiler 地图服务
+
+- **"stadiamaps"** - Stadia Maps 地图服务
+
+每个`MAP_TILE_VERNDOR`都提供了多种`MAP_TILE_STYLE`选择，配置时需保证匹配。具体的`MAP_TILE_STYLE`名称，可参考`src/utils/const.ts`文件中的定义。
+
+当使用 **"maptiler"** 或是 **"stadiamaps"** 时，需配置`MAP_TILE_ACCESS_TOKEN`。默认的 token 在不更改的情况下，使用时会发生配额超限的问题。
+
+- **MapTiler**: 在 https://cloud.maptiler.com/auth/widget 注册获取（免费）
+
+- **Stadia Maps**: 在 https://client.stadiamaps.com/signup/ 注册获取（免费）
+
 ## 个性化设置
 
 > 在仓库目录下找到 `src/static/site-metadata.ts`，找到以下内容并修改成你自己想要的。
@@ -578,7 +604,7 @@ python run_page/get_garmin_secret.py ${your email} ${your password}
 
 #### 执行佳明国际区同步脚本
 
-复制上述终端中输出的密钥，如果您是使用 Github 请在 Github Action 中配置**GARMIN_SECRET_STRING**参数
+复制上述终端中输出的密钥，如果您是使用 GitHub 请在 GitHub Action 中配置**GARMIN_SECRET_STRING**参数
 
 示例：
 
@@ -613,7 +639,7 @@ python run_page/get_garmin_secret.py ${your email} ${your password} --is-cn
 
 #### 执行佳明国区同步脚本
 
-复制上述终端中输出的密钥，如果您是使用 Github 请在 Github Action 中配置**GARMIN_SECRET_STRING_CN** 参数
+复制上述终端中输出的密钥，如果您是使用 GitHub 请在 GitHub Action 中配置**GARMIN_SECRET_STRING_CN** 参数
 ![get_garmin_secret](docs/add_garmin_secret_cn_string.jpg)
 示例：
 
@@ -950,7 +976,8 @@ python run_page/nike_to_strava_sync.py eyJhbGciThiMTItNGIw******  xxx xxx xxx
 
 <br>
 
-1. 完成 garmin 和 strava 的步骤，同时，还需要在 Github Actions secret 那新增 Strava 配置：`secrets.STRAVA_EMAIL`、`secrets.STRAVA_PASSWORD`
+1. 完成 garmin 和 strava 的步骤，同时，还需要在 GitHub Actions secret 那新增 Strava 配置：`secrets.STRAVA_EMAIL`、`secrets.STRAVA_PASSWORD`, `secrets.STRAVA_JWT`, 注意：`STRAVA_JWT` 优先级比 `STRAVA_EMAIL` 和 `STRAVA_PASSWORD` 高， `STRAVA_JWT` 为 Strava 网页端登录后 Cookie 的`strava_remember_token`字段
+
 2. 在项目根目录下执行：
 
    ```bash
@@ -981,6 +1008,10 @@ python run_page/nike_to_strava_sync.py eyJhbGciThiMTItNGIw******  xxx xxx xxx
 
 <details>
 <summary>获取您的 Coros 高驰 数据</summary>
+
+<br>
+
+- 如果你只想同步跑步数据增加命令 --only-run
 
 #### 在终端中输入以下命令
 
@@ -1039,10 +1070,70 @@ python run_page/keep_to_strava_sync.py ${your mobile} ${your password} ${client_
 - 生成数据展示 SVG
 - 展示效果：[点击查看](https://raw.githubusercontent.com/yihong0618/running_page/master/assets/github.svg)、[点击查看](https://raw.githubusercontent.com/yihong0618/running_page/28fa801e4e30f30af5ae3dc906bf085daa137936/assets/grid.svg)
 
+```bash
+
+python run_page/gen_svg.py -h
+
+usage: gen_svg.py [-h] [--gpx-dir DIR] [--output FILE] [--language LANGUAGE] [--year YEAR] [--title TITLE] [--athlete NAME] [--special FILE] [--type TYPE]
+                  [--background-color COLOR] [--track-color COLOR] [--track-color2 COLOR] [--text-color COLOR] [--special-color COLOR] [--special-color2 COLOR] [--units UNITS]
+                  [--verbose] [--logfile FILE] [--special-distance DISTANCE] [--special-distance2 DISTANCE] [--min-distance DISTANCE] [--use-localtime] [--from-db]
+                  [--github-style GITHUB_STYLE] [--circular-rings] [--circular-ring-color COLOR] [--empty-data-color COLOR] [--birth YYYY-MM]
+
+options:
+  -h, --help            show this help message and exit
+  --gpx-dir DIR         Directory containing GPX files (default: current directory).
+  --output FILE         Name of generated SVG image file (default: "poster.svg").
+  --language LANGUAGE   Language (default: english).
+  --year YEAR           Filter tracks by year; "NUM", "NUM-NUM", "all" (default: all years)
+  --title TITLE         Title to display.
+  --athlete NAME        Athlete name to display (default: "John Doe").
+  --special FILE        Mark track file from the GPX directory as special; use multiple times to mark multiple tracks.
+  --type TYPE           Type of poster to create (default: "grid", available: "grid", "circular", "github", "monthoflife").
+  --background-color COLOR
+                        Background color of poster (default: "#222222").
+  --track-color COLOR   Color of tracks (default: "#4DD2FF").
+  --track-color2 COLOR  Secondary color of tracks (default: none).
+  --text-color COLOR    Color of text (default: "#FFFFFF").
+  --special-color COLOR
+                        Special track color (default: "#FFFF00").
+  --special-color2 COLOR
+                        Secondary color of special tracks (default: none).
+  --units UNITS         Distance units; "metric", "imperial" (default: "metric").
+  --verbose             Verbose logging.
+  --logfile FILE
+  --special-distance DISTANCE
+                        Special Distance1 by km and color with the special_color
+  --special-distance2 DISTANCE
+                        Special Distance2 by km and corlor with the special_color2
+  --min-distance DISTANCE
+                        min distance by km for track filter
+  --use-localtime       Use utc time or local time
+  --from-db             activities db file
+  --github-style GITHUB_STYLE
+                        github svg style; "align-firstday", "align-monday" (default: "align-firstday").
+  --birth YYYY-MM       Birth date in format YYYY-MM
+
+Circular Type Options:
+  --circular-rings      Draw distance rings.
+  --circular-ring-color COLOR
+                        Color of distance rings.
+
+Github Type Options:
+  --empty-data-color COLOR
+                        Color for empty dates in github style poster (default: #444444)
+
+```
+
 > 感兴趣的同学可以改下方参数 (--special-distance 10 --special-distance2 20, 10km~20km 展示为 special-color1 20km 以上展示为 special-color2, --min-distance 10.0 用来筛选 10km 以上的)
 
 ```bash
 python run_page/gen_svg.py --from-db --title "${{ env.TITLE }}" --type github --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github.svg --use-localtime --min-distance 0.5
+```
+
+如果你想要更改 github svg 中空数据的背景颜色，请使用 `--empty-data-color`:
+
+```bash
+python run_page/gen_svg.py --from-db --title "${{ env.TITLE }}" --type github --athlete "${{ env.ATHLETE }}" --special-distance 10 --special-distance2 20 --special-color yellow --special-color2 red --output assets/github.svg --use-localtime --min-distance 0.5 ----empty-data-color grey
 ```
 
 ```bash
@@ -1143,7 +1234,6 @@ python3 run_page/auto_share_sync.py --api_key xxxxxxxxx --base_url xxxxxxxx --da
 4. 为 GitHub Actions 添加代码提交权限，访问仓库的 `Settings > Actions > General`页面，找到 `Workflow permissions` 的设置项，将选项配置为 `Read and write permissions`，支持 CI 将运动数据更新后提交到仓库中。
 
 5. 如果想把你的 running_page 部署在 xxx.github.io 而不是 xxx.github.io/run_page 亦或是想要添加自定义域名于 GitHub Pages，需要做三点
-
    - 修改你的 fork 的 running_page 仓库改名为 xxx.github.io, xxx 是你 github 的 username
    - 修改 gh-pages.yml 中的 Build 模块，删除 `${{ github.event.repository.name }}` 改为`run: PATH_PREFIX=/ pnpm build` 即可
    - 修改 src/static/site-metadata.ts 中 `siteUrl: ''` 或是添加你的自定义域名，`siteUrl: '[your_own_domain]'`，即可
@@ -1212,7 +1302,7 @@ Actions [源码](https://github.com/yihong0618/running_page/blob/master/.github/
 
 </details>
 
-## Github Cache
+## GitHub Cache
 
 <details>
 <summary>把数据文件放在 GitHub Cache 中</summary>
