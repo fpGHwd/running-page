@@ -22,7 +22,7 @@
    - For old data: To include `Elevation Gain` for past activities, perform a full reimport.
    - To show the 'Elevation Gain' column, modify `SHOW_ELEVATION_GAIN` in `src/utils/const.ts`
    - note: `Elevation Gain` may be inaccurate. You can use Strava's "Correct Elevation" or Garmin's "Elev Corrections" feature for more precise data.
-6. It cost me a lot money, so please do not use my mapbox token more check this [issue](https://github.com/yihong0618/running_page/issues/643)
+6. This project now uses MapCN (free) by default. If you choose to use Mapbox, please get your own token.  Do not use the project maintainer's token - check this [issue](https://github.com/yihong0618/running_page/issues/643) and [issue #1055](https://github.com/yihong0618/running_page/issues/1055)
 
 <p align="center">
   <img width="150" src="https://raw.githubusercontent.com/shaonianche/gallery/master/running_page/running_page_logo.png" />
@@ -128,7 +128,10 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 | [Bolyn](https://run.wbolyn.com)                      | <https://run.wbolyn.com>                       | Coros       |
 | [LeiChen](https://github.com/xthirty77)              | <https://xthirty77.github.io/running_page/>    | Coros       |
 | [itrunner](https://itrunner.cn)                      | <https://itrunner.cn>                          | Garmin      |
-
+| [maslke](https://github.com/maslke)                  | <https://maslke.space/running_page/>           | Garmin-cn   |
+| [Niewei Yang](https://github.com/Niewei-Yang)        | <https://neewii-worksout.vercel.app/>          | Strava      |
+| [RUN.LOG](https://github.com/bzzd2001)            | <https://run.731558.xyz:6881/>                 | Strava      |
+| [StoneRicky](https://github.com/StoneRicky)       | <https://stonericky.github.io/running_page/>   | COROS       |
 </details>
 
 ## How it works
@@ -142,6 +145,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 3. React Hooks
 4. Mapbox for map display
 5. Supports most sports apps such as nike strava...
+6. Support for metric and imperial units
 
 > automatically backup gpx data for easy backup and uploading to other software.
 >
@@ -169,6 +173,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 - **[Joyrun](#joyrun)**
 - **[Komoot](#komoot)**
 - **[Onelap](#onelap)**
+- **[Intervals.icu](#intervalsicu)**
 
 ## Download
 
@@ -218,6 +223,10 @@ Open your browser and visit localhost:80
 
 ```
 
+### Imperial Units
+* add `--build-arg VITE_USE_IMPERIAL=true` to `docker build ...`
+* add `--units imperial` flag to each `python3 run_page/gen_svg.py ...` command in the [Dockerfile](https://github.com/yihong0618/running_page/blob/master/Dockerfile)
+
 ## Local sync data
 
 ### Modifying Mapbox token
@@ -235,21 +244,52 @@ const MAPBOX_TOKEN =
 > In addition to using the default map tile style, you can customize the map display by modifying the following configurations in `src/utils/const.ts`:
 
 ```typescript
-const MAP_TILE_VENDOR = 'maptiler';
-const MAP_TILE_STYLE = 'winter-dark';
-const MAP_TILE_ACCESS_TOKEN = 'your_access_token';
+const MAP_TILE_VENDOR = 'mapcn'; // Default (free!)
+const MAP_TILE_STYLE = 'osm-bright';
+const MAP_TILE_ACCESS_TOKEN = ''; // Not needed for MapCN
 ```
 
 Currently supported `MAP_TILE_VENDOR` options include:
 
-- **"mapbox"** - Mapbox map services
-- **"maptiler"** - MapTiler map services
-- **"stadiamaps"** - Stadia Maps services
+- **"mapcn"** - MapCN map services (FREE, no token required) ⭐ DEFAULT & RECOMMENDED
+- **"mapbox"** - Mapbox map services (requires token, has costs)
+- **"maptiler"** - MapTiler map services (free tier available)
+- **"stadiamaps"** - Stadia Maps services (free tier available)
+
+Using MapCN (Default)
+MapCN is a free map tile provider and is now the default. No configuration needed!
+
+Available MapCN styles:
+
+- **osm-bright** - Light OpenStreetMap style (default)
+- **osm-liberty** - Alternative light style
+- **dark-matter** - Dark theme style
+
+**No access token required! ** 🎉
+
+## Attribution
+
+When using MapCN (Carto Basemaps), please ensure you comply with their attribution requirements:
+
+- Map tiles: © [CARTO](https://carto.com/)
+- Map data: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
+
+The project template already includes appropriate attribution in the map display.
+
+## Using Other Providers
+If you prefer Mapbox, MapTiler, or Stadia Maps, you can change the vendor:
+
+```typescript
+const MAP_TILE_VENDOR = 'mapbox'; // or 'maptiler' or 'stadiamaps'
+const MAP_TILE_STYLE = 'dark-v10'; // style for chosen vendor
+const MAP_TILE_ACCESS_TOKEN = 'your_access_token_here';
+```
 
 Each `MAP_TILE_VENDOR` provides multiple `MAP_TILE_STYLE` options. Ensure the style matches your selected vendor. For available `MAP_TILE_STYLE` names, refer to the definitions in `src/utils/const.ts`.
 
-When using **"maptiler"** or **"stadiamaps"**, you must configure an `ACCESS_TOKEN`. The default token may cause quota limit issues if not replaced.
+When using **"mapbox"**, **"maptiler"** or **"stadiamaps"**, you must configure an `ACCESS_TOKEN`. The default token may cause quota limit issues if not replaced.
 
+- **Mapbox**: Register at [https://www.mapbox.com/](https://www.mapbox.com/) (Has usage costs)
 - **MapTiler**: Register at [https://cloud.maptiler.com/auth/widget](https://cloud.maptiler.com/auth/widget) (Free tier available)
 - **Stadia Maps**: Sign up at [https://client.stadiamaps.com/signup/](https://client.stadiamaps.com/signup/) (Free tier available)
 
@@ -905,6 +945,48 @@ python3 run_page/onelap_sync.py 'your onelap phone' 'password' --with-fit
 
 </details>
 
+### Intervals.icu
+
+<details>
+<summary>Get your <code>Intervals.icu</code> data</summary>
+
+<br>
+
+Sync running activities from [Intervals.icu](https://intervals.icu). Downloads original FIT/GPX files.
+
+1. Log in to [Intervals.icu](https://intervals.icu), go to **Settings** → **Developer Settings** to find your **Athlete ID** and create an **API Key**.
+
+2. Execute in the root directory:
+
+```bash
+python run_page/intervals_icu_sync.py ${athlete_id} ${api_key}
+```
+
+If you want to sync all historical data (default is last 6 months):
+
+```bash
+python run_page/intervals_icu_sync.py ${athlete_id} ${api_key} --all
+```
+
+To specify a custom start date:
+
+```bash
+python run_page/intervals_icu_sync.py ${athlete_id} ${api_key} --start-date 2024-01-01
+```
+
+If your data comes from a Huawei/China device using the GCJ-02 coordinate system, add `--gcj02` to fix the coordinate offset (converts GCJ-02 to WGS-84 in downloaded FIT/GPX/TCX files):
+
+```bash
+python run_page/intervals_icu_sync.py ${athlete_id} ${api_key} --gcj02
+```
+
+#### GitHub Actions
+
+1. Change `RUN_TYPE` to `intervals_icu` in the `run_data_sync.yml` file
+2. Add `INTERVALS_ICU_ATHLETE_ID` and `INTERVALS_ICU_API_KEY` to your GitHub repository secrets
+
+</details>
+
 ### Total Data Analysis
 
 <details>
@@ -1186,7 +1268,8 @@ supported manufacturer:
 
 # Contribution
 
-- Any Issues PR welcome.
+- Any Issues welcome.
+- PR need to disscuss first(For LLM year 2026)
 - You can PR share your Running page in README I will merge it.
 
 Before submitting PR:
