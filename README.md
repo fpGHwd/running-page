@@ -130,8 +130,9 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 | [itrunner](https://itrunner.cn)                      | <https://itrunner.cn>                          | Garmin      |
 | [maslke](https://github.com/maslke)                  | <https://maslke.space/running_page/>           | Garmin-cn   |
 | [Niewei Yang](https://github.com/Niewei-Yang)        | <https://neewii-worksout.vercel.app/>          | Strava      |
-| [RUN.LOG](https://github.com/bzzd2001)            | <https://run.731558.xyz:6881/>                 | Strava      |
-| [StoneRicky](https://github.com/StoneRicky)       | <https://stonericky.github.io/running_page/>   | COROS       |
+| [RUN.LOG](https://github.com/bzzd2001)               | <https://run.731558.xyz:6881/>                 | Strava      |
+| [StoneRicky](https://github.com/StoneRicky)          | <https://stonericky.github.io/running_page/>   | COROS       |
+| [coutureone](https://github.com/coutureone)          | <https://run.xcouture.cc/>                     | Garmin      |
 </details>
 
 ## How it works
@@ -146,6 +147,7 @@ English | [简体中文](https://github.com/yihong0618/running_page/blob/master/
 4. Mapbox for map display
 5. Supports most sports apps such as nike strava...
 6. Support for metric and imperial units
+7. Terminal UI (TUI) for browsing activities locally
 
 > automatically backup gpx data for easy backup and uploading to other software.
 >
@@ -192,6 +194,30 @@ pnpm develop
 ```
 
 Open your browser and visit <http://localhost:5173/>
+
+## TUI (Terminal UI)
+
+You can browse your activities in the terminal using the built-in Textual TUI.
+
+```bash
+# Using make
+make tui
+
+# Or run directly with uv
+uv run run_page
+
+# Or specify a custom activities.json path
+uv run run_page /path/to/your/activities.json
+```
+
+Keyboard shortcuts inside TUI:
+
+- `1` / `2` – Switch between List and Stats views
+- `←` / `→` – Change year filter
+- `↑` / `↓` – Navigate activities
+- `y` – Cycle through years
+- `t` – Cycle through activity types
+- `q` – Quit
 
 ## Docker
 
@@ -334,7 +360,7 @@ const LIGHTS_ON = false;
 const SHOW_ELEVATION_GAIN = true;
 ```
 
-- To use Google Analytics, you need to modify the configuration in the `src/utils/const.ts` file.
+- To use Google Analytics, you need to modify the configuration in the `src/utils/analytics.ts` file.
 
 ```typescript
 const USE_GOOGLE_ANALYTICS = false;
@@ -609,6 +635,9 @@ python run_page/nike_sync.py eyJhbGciThiMTItNGIw******
 <summary> Get your <code>Strava</code> data </summary>
 
 <br>
+
+> [!NOTE]
+> Strava updated its Developer Program in June 2026. If you use Strava as the data source, or upload activities to Strava before syncing, check your app tier in the [Strava API settings dashboard](https://www.strava.com/settings/api). Standard Tier developers need a Strava subscription to access the API; existing Standard Tier developers are affected from June 30, 2026. See [Strava's announcement](https://communityhub.strava.com/insider-journal-9/an-update-to-our-developer-program-13428) for details.
 
 1. Sign in/Sign up [Strava](https://www.strava.com/) account
 2. Open after successful Signin [Strava Developers](http://developers.strava.com) -> [Create & Manage Your App](https://strava.com/settings/api)

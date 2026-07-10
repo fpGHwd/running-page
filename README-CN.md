@@ -129,6 +129,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 | [Niewei Yang](https://github.com/Niewei-Yang)     | <https://neewii-worksout.vercel.app/>          | Strava      |
 | [RUN.LOG](https://github.com/bzzd2001)            | <https://run.731558.xyz:6881/>                 | Strava      |
 | [StoneRicky](https://github.com/StoneRicky)       | <https://stonericky.github.io/running_page/>   | COROS       |
+| [coutureone](https://github.com/coutureone)          | <https://run.xcouture.cc/>                     | Garmin      |
 </details>
 
 ## 它是怎么工作的
@@ -142,6 +143,7 @@ R.I.P. 希望大家都能健康顺利的跑过终点，逝者安息。
 3. React Hooks
 4. Mapbox 进行地图展示
 5. Nike、Strava、佳明（佳明中国）及 Keep 等，自动备份 GPX 数据，方便备份及上传到其它软件
+6. 支持终端界面（TUI）本地浏览运动数据
 
 > 因为数据存在 gpx 和 data.db 中，理论上支持几个软件一起，你可以把之前各类 App 的数据都同步到这里（建议本地同步，之后 Actions 选择正在用的 App）
 >
@@ -202,6 +204,30 @@ pnpm develop
 ```
 
 访问 <http://localhost:5173/> 查看
+
+## TUI（终端界面）
+
+你可以在终端中使用内置的 Textual TUI 浏览运动数据。
+
+```bash
+# 使用 make
+make tui
+
+# 或直接用 uv 运行
+uv run run_page
+
+# 或指定自定义的 activities.json 路径
+uv run run_page /path/to/your/activities.json
+```
+
+TUI 中的键盘快捷键：
+
+- `1` / `2` – 切换列表和统计视图
+- `←` / `→` – 切换年份
+- `↑` / `↓` – 选择活动
+- `y` – 循环切换年份
+- `t` – 循环切换运动类型
+- `q` – 退出
 
 ## Docker
 
@@ -736,6 +762,9 @@ python run_page/nike_sync.py eyJhbGciThiMTItNGIw******
 <summary>获取 Strava 数据</summary>
 
 <br>
+
+> [!NOTE]
+> Strava 在 2026 年 6 月更新了 Developer Program。如果你使用 Strava 作为数据源，或者先把其它平台的数据上传到 Strava 再同步，请先在 [Strava API settings dashboard](https://www.strava.com/settings/api) 检查自己的 app tier。Standard Tier 开发者需要拥有 Strava 订阅才能访问 API；已有 Standard Tier 开发者会从 2026 年 6 月 30 日开始受到影响。详情见 [Strava 官方公告](https://communityhub.strava.com/insider-journal-9/an-update-to-our-developer-program-13428)。
 
 1. 注册/登陆 [Strava](https://www.strava.com/) 账号
 2. 登陆成功后打开 [Strava Developers](http://developers.strava.com) -> [Create & Manage Your App](https://strava.com/settings/api)
